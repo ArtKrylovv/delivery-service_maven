@@ -9,8 +9,8 @@ import com.solvd.deliveryservice.order.Order;
 import com.solvd.deliveryservice.parcel.Parcel;
 import com.solvd.deliveryservice.payment.Discount;
 import com.solvd.deliveryservice.payment.Invoice;
+import com.solvd.deliveryservice.payment.Payment;
 import com.solvd.deliveryservice.payment.Price;
-import com.solvd.deliveryservice.payment.Processing;
 import com.solvd.deliveryservice.person.Customer;
 import com.solvd.deliveryservice.person.Recipient;
 import com.solvd.deliveryservice.store.PhysicalStore;
@@ -217,7 +217,14 @@ public class Main {
             while (!exit && !paymentProcessing) {
                 try {
                     long cardNumber = Input.getLong("\nPlease input your 16 digits card number (do not separate digits by spaces):");
-                    Processing.processPayment(cardNumber, invoice);
+                    Payment payment  = new Payment(cardNumber, invoice);
+
+                    // lambda and functional interface
+                    payment.processPayment((cardNumber1 -> {
+                        int cardNumberLength = Long.toString(cardNumber).length();
+                        return cardNumberLength == 16;
+                            })
+                    );
                     System.out.println("Thank you for your payment!");
                     System.out.println("Your Invoice: "+invoice.generateInvoice(order));
                     paymentProcessing = true;
