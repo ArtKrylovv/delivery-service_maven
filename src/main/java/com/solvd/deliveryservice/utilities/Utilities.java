@@ -4,6 +4,8 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.Locale;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 public final class Utilities {
 
@@ -18,11 +20,12 @@ public final class Utilities {
     }
 
     // return current day of the week
-    public static String getDayOfTheWeek(){
+    public static String getDayOfTheWeek() {
         LocalDate date = LocalDate.now(); // get the current date
         DayOfWeek dayOfWeek = date.getDayOfWeek();
         return dayOfWeek.getDisplayName(TextStyle.FULL, Locale.getDefault());
     }
+
 }
 
 

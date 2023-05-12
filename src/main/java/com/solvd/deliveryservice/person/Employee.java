@@ -5,6 +5,7 @@ import java.util.Random;
 
 public class Employee extends Person {
     private String id;
+    private Position position;
 
     public Employee(String firstName, String lastName, long phone) {
         super(firstName, lastName, phone);
@@ -17,6 +18,14 @@ public class Employee extends Person {
 
     public void setId(String id) {
         this.id =id;
+    }
+
+    public void setPosition(Position position) {
+        this.position = position;
+    }
+
+    public Position getPosition() {
+        return position;
     }
 
     @Override

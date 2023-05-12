@@ -14,10 +14,10 @@ public class Invoice implements Document {
     private float taxAmount;
     private float totalAfterTax;
     private String id;
-
     private boolean paid;
+    private Order order;
 
-    public Invoice(Price price) {
+    public Invoice(Price price, Order order) {
         this.totalPriceBeforeTax = price.getTotalPrice();
         this.taxAmount = calculateTaxAmount(price.getTotalPrice());
         // after tax
@@ -25,6 +25,15 @@ public class Invoice implements Document {
         this.paid = false;
         this.id = generateId();
         idList.addElement(generateId());
+        this.order = order;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public static void setIdList(MyLinkedList<String> idList) {
+        Invoice.idList = idList;
     }
 
     public void setId(String id) {
@@ -71,17 +80,8 @@ public class Invoice implements Document {
         return totalPriceBeforeTax + taxAmount;
     }
 
-    public HashMap<String, String> generateInvoice(Order order) {
-        HashMap<String, String> invoice = new HashMap<>();
-        invoice.put("Price before tax (usd)", Float.toString(getTotalPriceBeforeTax()));
-        invoice.put("Tax amount (usd)", Float.toString(getTaxAmount()));
-        invoice.put("Total after tax (usd)", Float.toString(getTotalAfterTax()));
-        invoice.put("Invoice paid", Boolean.toString(isPaid()));
-        invoice.put("Invoice ID", getId());
-//         polymorphism in getFullAddress()
-        String fullAddress = Arrays.toString(order.getAddress().getFullAddress());
-        invoice.put("Delivery address", fullAddress);
-        return invoice;
+    public HashMap<String, String> generateInvoice(iInvoiceGen invoiceGen) {
+        return invoiceGen.generate(order);
     }
 
     @Override

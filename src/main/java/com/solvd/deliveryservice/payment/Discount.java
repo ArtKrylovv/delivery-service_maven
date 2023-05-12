@@ -2,53 +2,33 @@ package com.solvd.deliveryservice.payment;
 
 import com.solvd.deliveryservice.address.Address;
 import com.solvd.deliveryservice.exceptions.InvalidDiscountException;
+import com.solvd.deliveryservice.person.Customer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class Discount implements Accounting {
     final public static float VETERAN_DISCOUNT = 0.15F;
-    private float manualDiscount;
-    private float totalDiscount;
+    public float manualDiscount;
     private final static Logger LOGGER = LogManager.getLogger(Discount.class);
+    private Customer customer;
 
-    public Discount(float manualDiscount, boolean veteranStatus) {
-        if (discountChecker(manualDiscount)){
-            this.manualDiscount = manualDiscount;
-        } else {
-            LOGGER.error("Discount must be a float greater than 0 and less than 1");
-            throw new InvalidDiscountException("Discount must be a float greater than 0 and less than 1");
-        }
-        this.totalDiscount = calculateTotalDiscount(veteranStatus);
-    }
-
-    public Discount(boolean veteranStatus) {
-        this.totalDiscount = calculateTotalDiscount(veteranStatus);
+    public Discount(float manualDiscount, Customer customer) {
+        this.manualDiscount = manualDiscount;
+        this.customer = customer;
     }
 
     public float getManualDiscount() {
         return manualDiscount;
     }
 
-    public float getTotalDiscount() {
-        return totalDiscount;
-    }
-
     public void setManualDiscount(float manualDiscount) {
-        if (discountChecker(manualDiscount)){
-            this.manualDiscount = manualDiscount;
-        } else {
-            LOGGER.error("Discount must be a float greater or equal to 0 and less than 1");
-            throw new InvalidDiscountException("Discount must be a float greater or equal to 0 and less than 1");
-        }
+        this.manualDiscount = manualDiscount;
     }
 
-    private float calculateTotalDiscount(boolean veteranStatus) {
-        if(veteranStatus) {
-            return manualDiscount + VETERAN_DISCOUNT;
-        } else{
-            return manualDiscount;
-            }
-        }
+    public float calculateTotalDiscount(iDiscountGen discountGen) {
+        return discountGen.generate(customer);
+    }
+
     // implements Accounting interface method
     public boolean discountChecker(float discount){
         return discount >= 0 && discount < 1;

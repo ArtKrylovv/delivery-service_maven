@@ -7,18 +7,29 @@ import org.apache.logging.log4j.Logger;
 
 public class Payment {
     private final static Logger LOGGER = LogManager.getLogger(Payment.class);
-    long cardNumber;
     Invoice invoice;
+    long cardNumber;
 
     public Payment(long cardNumber, Invoice invoice) {
+        this.invoice = invoice;
         this.cardNumber = cardNumber;
+    }
+
+    public float getCardNumber() {
+        return cardNumber;
+    }
+
+    public Invoice getInvoice() {
+        return invoice;
+    }
+
+    public void setInvoice(Invoice invoice) {
         this.invoice = invoice;
     }
 
-//    private static boolean cardChecker(long cardNumber) {
-////        int cardNumberLength = Long.toString(cardNumber).length();
-////        return cardNumberLength == 16;
-//    }
+    public void setCardNumber(long cardNumber) {
+        this.cardNumber = cardNumber;
+    }
 
     public void processPayment(iCardCheck check)  {
         if (check.validateCard(cardNumber)) {
